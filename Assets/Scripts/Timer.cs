@@ -97,5 +97,16 @@ public class Timer : MonoBehaviour
         }
     }
 
+    // reset all fields to defautl values
+    public void Reset()
+    {
+        totalSeconds = 0;
+
+        elapsedSeconds = 0;
+        running = false;
+
+        started = false;
+    }
+
     #endregion
 }

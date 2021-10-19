@@ -52,8 +52,7 @@ public class CircleMover : MonoBehaviour
             else if (timer.Finished)
             {
                 stopped = false;
-                Destroy(timer);
-                timer = gameObject.AddComponent<Timer>();
+                timer.Reset();
             }
         }
         if (!stopped)
