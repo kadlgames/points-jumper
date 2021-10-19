@@ -59,17 +59,14 @@ public class Controller : MonoBehaviour
                     animator.SetBool("isControllerShowed", true);
                     touchPos.y -= radius * point.transform.lossyScale.y;
                     transform.position = touchPos;
-                    print("Down");
                 }
                 else if (touch.phase == TouchPhase.Ended || Input.GetMouseButtonUp(0))
                 {
                     animator.SetBool("isControllerShowed", false);
                     jumper.GetComponent<Jumper>().Jump(angle);
-                    print("Up");
                 }
                 else
                 {
-                    print("Moved");
                     // touchPos = Camera.main.ScreenToWorldPoint(touch.position);
 
                     if (touchPos.y > transform.position.y) touchPos.y = transform.position.y;
