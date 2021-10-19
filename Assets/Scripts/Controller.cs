@@ -38,6 +38,7 @@ public class Controller : MonoBehaviour
 
     #endregion
     // Start is called before the first frame update
+    
     void Start()
     {
         radius = point.transform.localPosition.y;
@@ -49,43 +50,44 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0 && !GameManager.IsGamePaused)
+        if (GetTouchPosition(out var touchPos, out Touch touch))
         {
-            Touch touch = Input.GetTouch(0);
-            Vector2 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
             if (!IfTouchAtPauseButton(touchPos))
             {
-                switch (touch.phase)
+                if (touch.phase == TouchPhase.Began || Input.GetMouseButtonDown(0))
                 {
-                    case TouchPhase.Began:
-                        animator.SetBool("isControllerShowed", true);
-                        touchPos.y -= radius * point.transform.lossyScale.y;
-                        transform.position = touchPos;
-                        break;
-                    case TouchPhase.Ended:
-                        animator.SetBool("isControllerShowed", false);
-                        jumper.GetComponent<Jumper>().Jump(angle);
-                        break;
-                    case TouchPhase.Moved:
-                        touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+                    animator.SetBool("isControllerShowed", true);
+                    touchPos.y -= radius * point.transform.lossyScale.y;
+                    transform.position = touchPos;
+                    print("Down");
+                }
+                else if (touch.phase == TouchPhase.Ended || Input.GetMouseButtonUp(0))
+                {
+                    animator.SetBool("isControllerShowed", false);
+                    jumper.GetComponent<Jumper>().Jump(angle);
+                    print("Up");
+                }
+                else
+                {
+                    print("Moved");
+                    // touchPos = Camera.main.ScreenToWorldPoint(touch.position);
 
-                        if (touchPos.y > transform.position.y) touchPos.y = transform.position.y;
+                    if (touchPos.y > transform.position.y) touchPos.y = transform.position.y;
 
-                        // Move the point and change the angle
+                    // Move the point and change the angle
 
-                        float distance = Vector2.Distance(transform.position, touchPos);
-                        float cosx = (transform.position.y - touchPos.y) / distance;
-                        float sinx = (transform.position.x - touchPos.x) / distance;
+                    float distance = Vector2.Distance(transform.position, touchPos);
+                    float cosx = (transform.position.y - touchPos.y) / distance;
+                    float sinx = (transform.position.x - touchPos.x) / distance;
 
-                        angle = Mathf.Acos(cosx) * Mathf.Rad2Deg;
-                        if (sinx > 0) angle *= -1;
-                        angle += 90;
+                    angle = Mathf.Acos(cosx) * Mathf.Rad2Deg;
+                    if (sinx > 0) angle *= -1;
+                    angle += 90;
 
-                        jumper.GetComponent<Jumper>().RotateArrow(angle);
-                        Vector2 newPointPos = new Vector2(radius * sinx, radius * cosx);
+                    jumper.GetComponent<Jumper>().RotateArrow(angle);
+                    Vector2 newPointPos = new Vector2(radius * sinx, radius * cosx);
 
-                        RotatePointAndArrow(newPointPos);
-                        break;
+                    RotatePointAndArrow(newPointPos);
                 }
             }
         }
@@ -101,21 +103,28 @@ public class Controller : MonoBehaviour
 
     bool IfTouchAtPauseButton(Vector2 tp)
     {
-        Debug.Log("touchPos " + tp.x + " " + tp.y);
-        Debug.Log("buttonPos " + pauseButton.transform.position.x + " " + pauseButton.transform.position.y);
-        if (tp.x >= (0.5 * pauseButton.transform.position.x
-            - pauseButton.transform.lossyScale.x * pauseButtonImage.rectTransform.rect.width) &&
-            tp.x <= (0.5 * pauseButton.transform.position.x
-            + pauseButton.transform.lossyScale.x * pauseButtonImage.rectTransform.rect.width) &&
-            tp.y >= (0.5 * pauseButton.transform.position.y
-            - pauseButton.transform.lossyScale.y * pauseButtonImage.rectTransform.rect.height) &&
-            tp.y <= (0.5 * pauseButton.transform.position.y
-            + pauseButton.transform.lossyScale.y * pauseButtonImage.rectTransform.rect.height))
-        {
-            return true;
-        }
-
         return false;
+    }
 
+    private bool GetTouchPosition(out Vector2 outVector, out Touch outTouch)
+    {
+        if (!GameManager.IsGamePaused)
+        {
+            if (Input.touchCount > 0)
+            {
+                outTouch = Input.GetTouch(0);
+                outVector = Camera.main.ScreenToWorldPoint(outTouch.position);
+                return true;
+            }
+            if (Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+            {
+                outTouch = new Touch {phase = TouchPhase.Canceled};
+                outVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                return true;
+            }
+        }
+        outVector = Vector2.zero;
+        outTouch = new Touch {phase = TouchPhase.Canceled};
+        return false;
     }
 }
