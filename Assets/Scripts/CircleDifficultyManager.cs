@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CircleDifficltyManager : MonoBehaviour
+public class CircleDifficultyManager : MonoBehaviour
 {
     [SerializeField] private CirclePackage[] circles;
     
