@@ -10,7 +10,7 @@ public class LevelGenerator : MonoBehaviour
     // [SerializeField]
     // CirclePackage[] circles = null;
 
-    private CircleDifficltyManager _circDifManager;
+    private CircleDifficultyManager _circDifManager;
 
 
     [Space(10)]
@@ -31,7 +31,7 @@ public class LevelGenerator : MonoBehaviour
     float leftBound = 0;
     float rightBound = 0;
 
-    public LevelGenerator(CircleDifficltyManager circDifManager)
+    public LevelGenerator(CircleDifficultyManager circDifManager)
     {
         this._circDifManager = circDifManager;
     }
@@ -49,7 +49,7 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         cameraMover = GetComponent<CameraMover>();
-        _circDifManager = GetComponent<CircleDifficltyManager>();
+        _circDifManager = GetComponent<CircleDifficultyManager>();
         _circDifManager.GetMaxDifficulty();
     }
 
