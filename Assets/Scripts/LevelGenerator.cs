@@ -6,9 +6,6 @@ public class LevelGenerator : MonoBehaviour
 {
 
     #region Fields
-    
-    // [SerializeField]
-    // CirclePackage[] circles = null;
 
     private CircleDifficultyManager _circDifManager;
 
@@ -16,10 +13,6 @@ public class LevelGenerator : MonoBehaviour
     [Space(10)]
     [SerializeField]
     Jumper jumper = null;
-
-    // [Header("Balance")]
-    // [SerializeField]
-    // float jumpNumberMultiplier = 0.1f;
 
     CameraMover cameraMover;
     bool isCircleSpawnedOnThisJump = false;
