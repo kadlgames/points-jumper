@@ -21,14 +21,18 @@ public class CircleDifficltyManager : MonoBehaviour
         _nextDifCirclesId.Clear();
         
         var maxNextDif = (int)(jumpNumber * jumpNumberMultiplier);
+        
         for(var i = 0; i < circles.Length; i++)
         {
             if (circles[i].difficulty <= maxNextDif)
+            {
                 _nextDifCirclesId.Add(i);
-        }
 
+            }
+        }
+        
         // Get next difficlty circle id
-        var nextCircleId = Random.Range(0, _nextDifCirclesId.Count);
+        var nextCircleId = _nextDifCirclesId[Random.Range(0, _nextDifCirclesId.Count)];
         // Circle difficulty select
         var n = circles[nextCircleId].difficulty;
         if (n > _maxDif) n = _maxDif;
@@ -56,9 +60,7 @@ public class CircleDifficltyManager : MonoBehaviour
         }
 
         // Select one of them
-        n = Random.Range(0, _suitableCirclesId.Count);
-        //Get real circle id
-        var circleId = _suitableCirclesId[n]; 
+        var circleId = _suitableCirclesId[Random.Range(0, _suitableCirclesId.Count)];
 
         return circles[circleId].circlePrefab;
     }
