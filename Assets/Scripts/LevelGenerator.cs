@@ -6,14 +6,11 @@ public class LevelGenerator : MonoBehaviour
 {
 
     #region Fields
-
-    Circle activeCircle;
-
+    
     // [SerializeField]
     // CirclePackage[] circles = null;
 
-    [SerializeField]
-    CircleDifficltyManager circDifManager;
+    private CircleDifficltyManager _circDifManager;
 
 
     [Space(10)]
@@ -33,6 +30,12 @@ public class LevelGenerator : MonoBehaviour
     float lowerBound = 0;
     float leftBound = 0;
     float rightBound = 0;
+
+    public LevelGenerator(CircleDifficltyManager circDifManager)
+    {
+        this._circDifManager = circDifManager;
+    }
+
     #endregion
 
     #region Properties
@@ -46,7 +49,8 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         cameraMover = GetComponent<CameraMover>();
-        circDifManager.getMaxDifficulty();
+        _circDifManager = GetComponent<CircleDifficltyManager>();
+        _circDifManager.GetMaxDifficulty();
     }
 
     // Update is called once per frame
@@ -90,7 +94,7 @@ public class LevelGenerator : MonoBehaviour
         //Debug.Log("Spawn!");
 
         
-        GameObject circle = circDifManager.getNextCicrcle(jumpNumber);
+        GameObject circle = _circDifManager.GetNextCicrcle(jumpNumber);
 
         // Creating spawn coordinates
         float x = Random.Range(leftBound, rightBound);

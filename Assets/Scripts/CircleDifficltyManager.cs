@@ -1,94 +1,75 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CircleDifficltyManager : MonoBehaviour
 {
-    [SerializeField]
-    CirclePackage[] circles = null;
-
+    [SerializeField] private CirclePackage[] circles;
+    
     [Header("Balance")]
-    [SerializeField]
-    float jumpNumberMultiplier = 0.1f;
+    [SerializeField] private float jumpNumberMultiplier = 0.1f;
 
-    int maxDif = 0;
+    private int _maxDif;
 
-    List<int> suitableCirclesId = new List<int>();
+    private readonly List<int> _suitableCirclesId = new List<int>();
     
     //Circles id with difficlty less or equal than maxNextDif
-    List<int> nextDifCirclesId = new List<int>();
-
-
-    public GameObject getNextCicrcle(int jumpNumber)
+    private readonly List<int> _nextDifCirclesId = new List<int>();
+    
+    public GameObject GetNextCicrcle(int jumpNumber)
     {
-        suitableCirclesId.Clear();
-        nextDifCirclesId.Clear();
+        _suitableCirclesId.Clear();
+        _nextDifCirclesId.Clear();
         
-        int maxNextDif = (int)(jumpNumber * jumpNumberMultiplier);
-        for(int i = 0; i < circles.Length; i++)
+        var maxNextDif = (int)(jumpNumber * jumpNumberMultiplier);
+        for(var i = 0; i < circles.Length; i++)
         {
             if (circles[i].difficulty <= maxNextDif)
-                nextDifCirclesId.Add(i);
+                _nextDifCirclesId.Add(i);
         }
 
         // Get next difficlty circle id
-        int nextCircleId = Random.Range(0, nextDifCirclesId.Count);
+        var nextCircleId = Random.Range(0, _nextDifCirclesId.Count);
         // Circle difficulty select
-        int n = circles[nextCircleId].difficulty;
-        if (n > maxDif) n = maxDif;
+        var n = circles[nextCircleId].difficulty;
+        if (n > _maxDif) n = _maxDif;
 
         //Creating array of suitable circles
-        for (int i = 0; i < circles.Length; i++)
+        for (var i = 0; i < circles.Length; i++)
         {
-            if (circles[i].difficulty == n) suitableCirclesId.Add(i);
+            if (circles[i].difficulty == n) _suitableCirclesId.Add(i);
         }
 
-        if (suitableCirclesId.Count == 0)
+        if (_suitableCirclesId.Count == 0)
         {
             Debug.LogError("in function CircleDifficltyManager::getNextCicrcle. Get empty suitableCirclesId list");
             
-            int minDifCircleId = 0;
-            for (int i = 0; i < circles.Length; i++)
+            var minDifCircleId = 0;
+            var minDif = int.MaxValue;
+            for (var i = 0; i < circles.Length; i++)
             {
-                int minDif = int.MaxValue;
-                if (circles[i].difficulty < minDif) 
-                {
-                    minDif = circles[i].difficulty;
-                    minDifCircleId = i;
-                }
+                if (circles[i].difficulty >= minDif) continue;
+                minDif = circles[i].difficulty;
+                minDifCircleId = i;
             }
 
-            suitableCirclesId.Add(minDifCircleId);
+            _suitableCirclesId.Add(minDifCircleId);
         }
 
         // Select one of them
-        n = Random.Range(0, (int)suitableCirclesId.Count);
+        n = Random.Range(0, _suitableCirclesId.Count);
         //Get real circle id
-        int circleId = suitableCirclesId[n]; 
+        var circleId = _suitableCirclesId[n]; 
 
         return circles[circleId].circlePrefab;
     }
 
 
-    public void getMaxDifficulty()
+    public void GetMaxDifficulty()
     {
-        foreach (CirclePackage circlePack in circles)
+        foreach (var circlePack in circles)
         {
-            if (circlePack.difficulty > maxDif) maxDif = circlePack.difficulty;
+            if (circlePack.difficulty > _maxDif) _maxDif = circlePack.difficulty;
         }
-        
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         
     }
 }
