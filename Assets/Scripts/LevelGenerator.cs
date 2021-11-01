@@ -8,7 +8,8 @@ public class LevelGenerator : MonoBehaviour
     #region Fields
 
     private CircleDifficultyManager _circDifManager;
-    
+
+
     [Space(10)]
     [SerializeField]
     Jumper jumper = null;
@@ -85,18 +86,8 @@ public class LevelGenerator : MonoBehaviour
         // SPAWNING CIRCLE
         //Debug.Log("Spawn!");
 
-        // Fetch the max difficulty of circles
-        int maxDif = 0;
-        foreach (CirclePackage circlePack in circles)
-        {
-            if (circlePack.difficulty > maxDif) maxDif = circlePack.difficulty;
-        }
-        // Circle difficulty select
-        int n = Random.Range(0, (int)(jumpNumber * jumpNumberMultiplier));
-        if (n > maxDif) n = circles.Length - 1;
         
         GameObject circle = _circDifManager.GetNextCicrcle(jumpNumber);
-
 
         // Creating spawn coordinates
         float x = Random.Range(leftBound, rightBound);
