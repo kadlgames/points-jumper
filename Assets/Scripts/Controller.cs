@@ -38,7 +38,7 @@ public class Controller : MonoBehaviour
     private void Update()
     {
         if (!GetTouchPosition(out var touchPos, out var touch)) return;
-        if (IfTouchAtPauseButton()) return;
+        if (IfTouchAtUI()) return;
         if (touch.phase == TouchPhase.Began || Input.GetMouseButtonDown(0))
         {
             _animator.SetBool(IsControllerShowed, true);
@@ -82,9 +82,9 @@ public class Controller : MonoBehaviour
         point.transform.localPosition = newPointPos;
     }
 
-    private static bool IfTouchAtPauseButton()
+    private static bool IfTouchAtUI()
     {
-        return false;
+        return Utils.Utils.IsPointerOverUi();
     }
 
     private static bool GetTouchPosition(out Vector2 outVector, out Touch outTouch)
