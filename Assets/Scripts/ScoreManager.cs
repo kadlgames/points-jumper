@@ -7,6 +7,8 @@ public class ScoreManager : MonoBehaviour
 {
     private int _nowScore = 0;
 
+    private Animator _scoreAnimator;
+
     private TMP_Text _scoreText;
 
     [SerializeField] private Jumper jumper;
@@ -20,6 +22,7 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         _scoreText = GetComponent<TMP_Text>();
+        _scoreAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -33,5 +36,6 @@ public class ScoreManager : MonoBehaviour
     {
         _nowScore += _dif + 1;
         _scoreText.text = _nowScore.ToString();
+       _scoreAnimator.SetTrigger("Bounce");
     }
 }
