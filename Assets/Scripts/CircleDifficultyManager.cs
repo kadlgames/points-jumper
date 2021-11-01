@@ -10,6 +10,8 @@ public class CircleDifficultyManager : MonoBehaviour
 
     private int _maxDif;
 
+    public static int CurrentCircleDif = 0;
+
     private readonly List<int> _suitableCirclesId = new List<int>();
     
     //Circles id with difficlty less or equal than maxNextDif
@@ -62,7 +64,9 @@ public class CircleDifficultyManager : MonoBehaviour
         // Select one of them
         var circleId = _suitableCirclesId[Random.Range(0, _suitableCirclesId.Count)];
 
-        return circles[circleId].circlePrefab;
+        var circleToSpawn = circles[circleId].circlePrefab;
+        circleToSpawn.GetComponent<Circle>().difficulty = circles[circleId].difficulty; 
+        return circleToSpawn;
     }
 
 

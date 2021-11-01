@@ -12,6 +12,8 @@ public class Circle : MonoBehaviour
     [SerializeField]
     GameObject particleSystemGO = null;
 
+    public int difficulty = 0;
+
     #endregion
 
     #region Properties

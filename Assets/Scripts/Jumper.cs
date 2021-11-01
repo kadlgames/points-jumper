@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 /// <summary>
@@ -32,6 +33,8 @@ public class Jumper : MonoBehaviour
     GameObject arrow;
     Rigidbody2D rb;
     #endregion
+
+    public event Action<int> CircleReached = delegate { };
 
     #region Properties
 
@@ -96,12 +99,16 @@ public class Jumper : MonoBehaviour
     {
         if (col.collider.tag == "Circle")
         {
-            col.gameObject.GetComponent<Circle>().Reached();
+            var circle = col.gameObject.GetComponent<Circle>(); 
+            circle.Reached();
+            CircleReached(circle.difficulty);
+            Debug.Log("circle dif in jumper = " + circle.difficulty.ToString());
             rb.gravityScale = 0;
             rb.velocity = new Vector2(0f, 0f);
             gameObject.transform.position = col.gameObject.transform.position;
             isJumping = false;
             arrow.SetActive(true);
+            
         }
         else
         {

@@ -853,6 +853,7 @@ GameObject:
   - component: {fileID: 519420034}
   - component: {fileID: 519420033}
   - component: {fileID: 519420035}
+  - component: {fileID: 519420036}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -962,37 +963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1cf2f22654eb7c49af10ef84133929c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circles:
-  - name: Standart
-    circlePrefab: {fileID: 3853059349693112376, guid: e1cd0e6940a28764cae6ee825eab2152,
-      type: 3}
-    difficulty: 0
-  - name: Moving
-    circlePrefab: {fileID: 5428196587812602496, guid: 51ef07d5a210b5146b71a4a855266ed1,
-      type: 3}
-    difficulty: 1
-  - name: WithShield
-    circlePrefab: {fileID: 8546656618335322651, guid: c37addbc65551774187cc0209b43fcc1,
-      type: 3}
-    difficulty: 2
-  - name: MovingWithShield
-    circlePrefab: {fileID: 4307507469002161978, guid: 4e81764910698c2459daa7771ab3f5dd,
-      type: 3}
-    difficulty: 3
-  - name: MovingHARD
-    circlePrefab: {fileID: 3597886982709197279, guid: e6248132e283a8f41998fad4eb060da8,
-      type: 3}
-    difficulty: 4
-  - name: MovingWithShieldHARD
-    circlePrefab: {fileID: 7155831825076367673, guid: 128b5be0e29c1ba4fb1eacf85da10c6f,
-      type: 3}
-    difficulty: 5
-  - name: Spinner
-    circlePrefab: {fileID: 5794779812073980871, guid: 050ce115e1b89f94f9993ddd8517feeb,
-      type: 3}
-    difficulty: 6
   jumper: {fileID: 1953568075}
-  jumpNumberMultiplier: 1
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1019,6 +990,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraSpeed: 15
   player: {fileID: 4408025456235888247}
+--- !u!114 &519420036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 409d6b007cdd649419348f9d077e16cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  circles:
+  - name: Circle
+    circlePrefab: {fileID: 3853059349693112376, guid: e1cd0e6940a28764cae6ee825eab2152,
+      type: 3}
+    difficulty: 0
+  - name: CircleSpinner
+    circlePrefab: {fileID: 5794779812073980871, guid: 050ce115e1b89f94f9993ddd8517feeb,
+      type: 3}
+    difficulty: 6
+  - name: MovingCircle
+    circlePrefab: {fileID: 5428196587812602496, guid: 51ef07d5a210b5146b71a4a855266ed1,
+      type: 3}
+    difficulty: 1
+  - name: MovingCircleHARD
+    circlePrefab: {fileID: 3597886982709197279, guid: e6248132e283a8f41998fad4eb060da8,
+      type: 3}
+    difficulty: 4
+  - name: MovingShieldCircle
+    circlePrefab: {fileID: 4307507469002161978, guid: 4e81764910698c2459daa7771ab3f5dd,
+      type: 3}
+    difficulty: 3
+  - name: MovingShieldCircleHARD
+    circlePrefab: {fileID: 7155831825076367673, guid: 128b5be0e29c1ba4fb1eacf85da10c6f,
+      type: 3}
+    difficulty: 5
+  - name: ShieldCircle
+    circlePrefab: {fileID: 8546656618335322651, guid: c37addbc65551774187cc0209b43fcc1,
+      type: 3}
+    difficulty: 2
+  jumpNumberMultiplier: 1
 --- !u!850595691 &653506406
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -1450,6 +1463,7 @@ GameObject:
   - component: {fileID: 1057684918}
   - component: {fileID: 1057684920}
   - component: {fileID: 1057684919}
+  - component: {fileID: 1057684921}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -1506,7 +1520,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.3490566, g: 0.05762726, b: 0.05762726, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1573,6 +1587,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1057684917}
   m_CullTransparentMesh: 1
+--- !u!114 &1057684921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057684917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ebe9b3da7fe4904fbce8f44bab9988a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumper: {fileID: 1953568075}
 --- !u!1 &1087637792
 GameObject:
   m_ObjectHideFlags: 0
