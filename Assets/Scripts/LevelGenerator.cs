@@ -7,17 +7,12 @@ public class LevelGenerator : MonoBehaviour
 
     #region Fields
 
-    Circle activeCircle;
+    private CircleDifficultyManager _circDifManager;
 
-    [SerializeField]
-    CirclePackage[] circles = null;
+
     [Space(10)]
     [SerializeField]
     Jumper jumper = null;
-
-    [Header("Balance")]
-    [SerializeField]
-    float jumpNumberMultiplier = 0.1f;
 
     CameraMover cameraMover;
     bool isCircleSpawnedOnThisJump = false;
@@ -28,6 +23,12 @@ public class LevelGenerator : MonoBehaviour
     float lowerBound = 0;
     float leftBound = 0;
     float rightBound = 0;
+
+    public LevelGenerator(CircleDifficultyManager circDifManager)
+    {
+        this._circDifManager = circDifManager;
+    }
+
     #endregion
 
     #region Properties
@@ -41,6 +42,8 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         cameraMover = GetComponent<CameraMover>();
+        _circDifManager = GetComponent<CircleDifficultyManager>();
+        _circDifManager.GetMaxDifficulty();
     }
 
     // Update is called once per frame
@@ -83,26 +86,8 @@ public class LevelGenerator : MonoBehaviour
         // SPAWNING CIRCLE
         //Debug.Log("Spawn!");
 
-        // Fetch the max difficulty of circles
-        int maxDif = 0;
-        foreach (CirclePackage circlePack in circles)
-        {
-            if (circlePack.difficulty > maxDif) maxDif = circlePack.difficulty;
-        }
-        // Circle difficulty select
-        int n = Random.Range(0, (int)(jumpNumber * jumpNumberMultiplier));
-        if (n > maxDif) n = circles.Length - 1;
         
-        //Creating array of suitable circles
-        List<GameObject> suitableCircles = new List<GameObject>(); 
-        foreach (CirclePackage circlePack in circles)
-        {
-            if (circlePack.difficulty == n) suitableCircles.Add(circlePack.circlePrefab);
-        }
-
-        // Select one of them
-        n = Random.Range(0, suitableCircles.Count);
-        GameObject circle = suitableCircles[n]; 
+        GameObject circle = _circDifManager.GetNextCicrcle(jumpNumber);
 
         // Creating spawn coordinates
         float x = Random.Range(leftBound, rightBound);
