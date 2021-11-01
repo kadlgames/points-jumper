@@ -87,7 +87,7 @@ public class LevelGenerator : MonoBehaviour
         //Debug.Log("Spawn!");
 
         
-        GameObject circle = _circDifManager.GetNextCicrcle(jumpNumber);
+        GameObject circle = _circDifManager.GetNextCircle(jumpNumber);
 
         // Creating spawn coordinates
         float x = Random.Range(leftBound, rightBound);

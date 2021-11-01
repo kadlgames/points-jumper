@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// A timer
@@ -11,14 +9,13 @@ public class Timer : MonoBehaviour
     #region Fields
 
     // timer duration
-    float totalSeconds = 0;
+    private float _totalSeconds;
 
     // timer execution
-    float elapsedSeconds = 0;
-    bool running = false;
+    private float _elapsedSeconds;
 
     // support for Finished property
-    bool started = false;
+    private bool _started;
 
     #endregion
 
@@ -33,9 +30,9 @@ public class Timer : MonoBehaviour
     {
         set
         {
-            if (!running)
+            if (!Running)
             {
-                totalSeconds = value;
+                _totalSeconds = value;
             }
         }
     }
@@ -45,36 +42,28 @@ public class Timer : MonoBehaviour
     /// This property returns false if the timer has never been started
     /// </summary>
     /// <value>true if finished; otherwise, false.</value>
-    public bool Finished
-    {
-        get { return started && !running; }
-    }
+    public bool Finished => _started && !Running;
 
     /// <summary>
     /// Gets whether or not the timer is currently running
     /// </summary>
     /// <value>true if running; otherwise, false.</value>
-    public bool Running
-    {
-        get { return running; }
-    }
+    public bool Running { get; private set; }
 
     #endregion
 
     #region Methods
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
 
         // update timer and check for finished
-        if (running)
+        if (!Running) return;
+        _elapsedSeconds += Time.deltaTime;
+        if (_elapsedSeconds >= _totalSeconds)
         {
-            elapsedSeconds += Time.deltaTime;
-            if (elapsedSeconds >= totalSeconds)
-            {
-                running = false;
-            }
+            Running = false;
         }
     }
 
@@ -89,23 +78,21 @@ public class Timer : MonoBehaviour
     {
 
         // only run with valid duration
-        if (totalSeconds > 0)
-        {
-            started = true;
-            running = true;
-            elapsedSeconds = 0;
-        }
+        if (!(_totalSeconds > 0)) return;
+        _started = true;
+        Running = true;
+        _elapsedSeconds = 0;
     }
 
-    // reset all fields to defautl values
+    // reset all fields to default values
     public void Reset()
     {
-        totalSeconds = 0;
+        _totalSeconds = 0;
 
-        elapsedSeconds = 0;
-        running = false;
+        _elapsedSeconds = 0;
+        Running = false;
 
-        started = false;
+        _started = false;
     }
 
     #endregion

@@ -1,73 +1,68 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[AddComponentMenu("Behaviour Modifiers/Mover")]
-public class CircleMover : MonoBehaviour
+namespace Behaviour_Modifiers
 {
-    #region Fields
-
-    Vector2 startPos, endPos;
-    [SerializeField]
-    float speed = 1f;
-    [SerializeField]
-    float timerDuration = 1f;
-
-    bool movingForward = true;
-    bool stopped = false;
-    bool isAlreadyMoved = false;
-    Timer timer;
-    Circle circle;
-
-    #endregion
-
-    void Start()
+    [AddComponentMenu("Behaviour Modifiers/Mover")]
+    public class CircleMover : MonoBehaviour
     {
-        BoundsPack bp = Bounds.GetBoundsPack();
-        startPos = transform.position;
-        timer = gameObject.AddComponent<Timer>();
-        circle = GetComponent<Circle>();
+        #region Fields
 
-        // Generating endpos
-        endPos.y = Random.Range(bp.Lower, bp.Upper);
-        endPos.x = Random.Range(bp.Left, bp.Right);
-    }
+        private Vector2 _startPos, _endPos;
+        [SerializeField] private float speed = 1f;
+        [SerializeField] private float timerDuration = 1f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (!circle.IsActive) Destroy(this);
-        // Logic
-        if ((Vector2)transform.position == endPos || ((Vector2)transform.position == startPos && isAlreadyMoved))
+        private bool _movingForward = true;
+        private bool _stopped;
+        private bool _isAlreadyMoved;
+        private Timer _timer;
+        private Circle _circle;
+
+        #endregion
+
+        private void Start()
         {
-            if (movingForward) movingForward = false;
-            else movingForward = true;
+            var bp = Bounds.GetBoundsPack();
+            _startPos = transform.position;
+            _timer = gameObject.AddComponent<Timer>();
+            _circle = GetComponent<Circle>();
 
-            if (!timer.Running && !timer.Finished)
-            {
-                stopped = true;
-                timer.Duration = timerDuration;
-                timer.Run();
-            }
-            else if (timer.Finished)
-            {
-                stopped = false;
-                timer.Reset();
-            }
+            // Generating end pos
+            _endPos.y = Random.Range(bp.Lower, bp.Upper);
+            _endPos.x = Random.Range(bp.Left, bp.Right);
         }
-        if (!stopped)
+
+        // Update is called once per frame
+        private void Update()
         {
-            isAlreadyMoved = true;
+            if (!_circle.IsActive) Destroy(this);
+            // Logic
+            if ((Vector2)transform.position == _endPos || ((Vector2)transform.position == _startPos && _isAlreadyMoved))
+            {
+                _movingForward = !_movingForward;
 
-            if (movingForward) transform.position = Vector2.MoveTowards(transform.position,
-             endPos, Time.deltaTime * speed);
-            else transform.position = Vector2.MoveTowards(transform.position,
-             startPos, Time.deltaTime * speed);
+                if (!_timer.Running && !_timer.Finished)
+                {
+                    _stopped = true;
+                    _timer.Duration = timerDuration;
+                    _timer.Run();
+                }
+                else if (_timer.Finished)
+                {
+                    _stopped = false;
+                    _timer.Reset();
+                }
+            }
+
+            if (_stopped) return;
+            _isAlreadyMoved = true;
+
+            transform.position = Vector2.MoveTowards(transform.position, _movingForward ? 
+                _endPos : _startPos, Time.deltaTime * speed);
         }
-    }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(startPos, endPos);
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawLine(_startPos, _endPos);
+        }
     }
 }

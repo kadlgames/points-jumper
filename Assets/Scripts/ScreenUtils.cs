@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Provides screen utilities
@@ -10,52 +8,33 @@ public static class ScreenUtils
     #region Fields
 
     // cached for efficient boundary checking
-    static float screenLeft;
-    static float screenRight;
-    static float screenTop;
-    static float screenBottom;
 
     #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets the left edge of the screen in world coordinates
     /// </summary>
     /// <value>left edge of the screen</value>
-    public static float ScreenLeft
-    {
-        get { return screenLeft; }
-    }
+    public static float ScreenLeft { get; private set; }
 
     /// <summary>
     /// Gets the right edge of the screen in world coordinates
     /// </summary>
     /// <value>right edge of the screen</value>
-    public static float ScreenRight
-    {
-        get { return screenRight; }
-    }
+    public static float ScreenRight { get; private set; }
 
     /// <summary>
     /// Gets the top edge of the screen in world coordinates
     /// </summary>
     /// <value>top edge of the screen</value>
-    public static float ScreenTop
-    {
-        get { return screenTop; }
-    }
+    public static float ScreenTop { get; private set; }
 
     /// <summary>
     /// Gets the bottom edge of the screen in world coordinates
     /// </summary>
     /// <value>bottom edge of the screen</value>
-    public static float ScreenBottom
-    {
-        get { return screenBottom; }
-    }
-
-    #endregion
+    public static float ScreenBottom { get; private set; }
+    
 
     #region Methods
 
@@ -65,18 +44,19 @@ public static class ScreenUtils
     public static void Initialize()
     {
         // save screen edges in world coordinates
-        float screenZ = -Camera.main.transform.position.z;
-        Vector3 lowerLeftCornerScreen = new Vector3(0, 0, screenZ);
-        Vector3 upperRightCornerScreen = new Vector3(
+        if (Camera.main is null) return;
+        var screenZ = -Camera.main.transform.position.z;
+        var lowerLeftCornerScreen = new Vector3(0, 0, screenZ);
+        var upperRightCornerScreen = new Vector3(
             Screen.width, Screen.height, screenZ);
-        Vector3 lowerLeftCornerWorld =
+        var lowerLeftCornerWorld =
             Camera.main.ScreenToWorldPoint(lowerLeftCornerScreen);
-        Vector3 upperRightCornerWorld =
+        var upperRightCornerWorld =
             Camera.main.ScreenToWorldPoint(upperRightCornerScreen);
-        screenLeft = lowerLeftCornerWorld.x;
-        screenRight = upperRightCornerWorld.x;
-        screenTop = upperRightCornerWorld.y;
-        screenBottom = lowerLeftCornerWorld.y;
+        ScreenLeft = lowerLeftCornerWorld.x;
+        ScreenRight = upperRightCornerWorld.x;
+        ScreenTop = upperRightCornerWorld.y;
+        ScreenBottom = lowerLeftCornerWorld.y;
     }
 
     #endregion

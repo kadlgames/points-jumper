@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 /// <summary>
 /// Jumper - character
@@ -9,54 +6,44 @@ using UnityEngine;
 public class Jumper : MonoBehaviour
 {
     #region Fields
-
-    /// <summary>
-    /// The angle arrow now rotated
-    /// </summary>
-    float angle;
-
+    
     /// <summary>
     /// The distance between jumper and arrow
     /// </summary>
-    float radius;
-
-    /// <summary>
-    /// Whether in jump
-    /// </summary>
-    bool isJumping = false;
+    private float _radius;
 
     [Header("Balance")]
     [SerializeField]
-    float ForceImpulseMultiplier = 10f;
+    private float forceImpulseMultiplier = 10f;
 
-    GameObject arrow;
-    Rigidbody2D rb;
+    private GameObject _arrow;
+    private Rigidbody2D _rb;
     #endregion
 
     #region Properties
 
-    public bool IsJumping
-    {
-        get { return isJumping; }
-    }
+    /// <summary>
+    /// Whether in jump
+    /// </summary>
+    public bool IsJumping { get; private set; }
 
     #endregion
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        arrow = GameObject.Find("arrow");
-        radius = arrow.transform.position.y - transform.position.y;
-        rb = GetComponent<Rigidbody2D>();
+        _arrow = GameObject.Find("arrow");
+        _radius = _arrow.transform.position.y - transform.position.y;
+        _rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // Arrow hiding
-        if (!isJumping)
+        if (!IsJumping)
         {
-            arrow.GetComponent<SpriteRenderer>().enabled = true;
+            _arrow.GetComponent<SpriteRenderer>().enabled = true;
         }
     }
 
@@ -66,13 +53,14 @@ public class Jumper : MonoBehaviour
     public void RotateArrow(float angle)
     {
         // Changing position
-        float rad = angle * Mathf.Deg2Rad;
-        float x = radius * Mathf.Cos(rad) + transform.position.x;
-        float y = radius * Mathf.Sin(rad) + transform.position.y;
-        arrow.transform.position = new Vector2(x, y);
+        var rad = angle * Mathf.Deg2Rad;
+        var position = transform.position;
+        var x = _radius * Mathf.Cos(rad) + position.x;
+        var y = _radius * Mathf.Sin(rad) + position.y;
+        _arrow.transform.position = new Vector2(x, y);
 
         // Changing rotation
-        arrow.transform.rotation = Quaternion.Euler(0, 0, 180 + angle);
+        _arrow.transform.rotation = Quaternion.Euler(0, 0, 180 + angle);
     }
 
     /// <summary>
@@ -80,32 +68,30 @@ public class Jumper : MonoBehaviour
     /// </summary>
     public void Jump(float angle)
     {
-        if (!isJumping)
-        {
-            isJumping = true;
-            float rad = angle * Mathf.Deg2Rad;
-            float x = radius * Mathf.Cos(rad);
-            float y = radius * Mathf.Sin(rad);
-            rb.AddForce(new Vector2(x, y) * ForceImpulseMultiplier, ForceMode2D.Impulse);
-            arrow.GetComponent<SpriteRenderer>().enabled = false;
-        }
+        if (IsJumping) return;
+        IsJumping = true;
+        var rad = angle * Mathf.Deg2Rad;
+        var x = _radius * Mathf.Cos(rad);
+        var y = _radius * Mathf.Sin(rad);
+        _rb.AddForce(new Vector2(x, y) * forceImpulseMultiplier, ForceMode2D.Impulse);
+        _arrow.GetComponent<SpriteRenderer>().enabled = false;
 
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.collider.tag == "Circle")
+        if (col.collider.CompareTag("Circle"))
         {
             col.gameObject.GetComponent<Circle>().Reached();
-            rb.gravityScale = 0;
-            rb.velocity = new Vector2(0f, 0f);
+            _rb.gravityScale = 0;
+            _rb.velocity = new Vector2(0f, 0f);
             gameObject.transform.position = col.gameObject.transform.position;
-            isJumping = false;
-            arrow.SetActive(true);
+            IsJumping = false;
+            _arrow.SetActive(true);
         }
         else
         {
-            rb.gravityScale = 1;
+            _rb.gravityScale = 1;
         }
     }
 }
