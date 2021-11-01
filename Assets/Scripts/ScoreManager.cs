@@ -33,6 +33,5 @@ public class ScoreManager : MonoBehaviour
     {
         _nowScore += _dif + 1;
         _scoreText.text = _nowScore.ToString();
-        Debug.Log("now score = " + _nowScore.ToString());
     }
 }

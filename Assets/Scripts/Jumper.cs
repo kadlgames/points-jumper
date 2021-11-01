@@ -102,7 +102,6 @@ public class Jumper : MonoBehaviour
             var circle = col.gameObject.GetComponent<Circle>(); 
             circle.Reached();
             CircleReached(circle.difficulty);
-            Debug.Log("circle dif in jumper = " + circle.difficulty.ToString());
             rb.gravityScale = 0;
             rb.velocity = new Vector2(0f, 0f);
             gameObject.transform.position = col.gameObject.transform.position;
