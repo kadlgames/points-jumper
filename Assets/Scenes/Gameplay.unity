@@ -1021,7 +1021,7 @@ MonoBehaviour:
     circlePrefab: {fileID: 8546656618335322651, guid: c37addbc65551774187cc0209b43fcc1,
       type: 3}
     difficulty: 2
-  jumpNumberMultiplier: 0.1
+  jumpNumberMultiplier: 1
 --- !u!1 &697755895
 GameObject:
   m_ObjectHideFlags: 0
