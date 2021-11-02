@@ -30,11 +30,14 @@ public class Jumper : MonoBehaviour
     [SerializeField]
     float ForceImpulseMultiplier = 10f;
 
+    [SerializeField] private float StrikeCoef = 1.2f;
+
+
     GameObject arrow;
     Rigidbody2D rb;
     #endregion
 
-    public event Action<int> CircleReached = delegate { };
+    public event Action<int, bool> CircleReached = delegate { };
 
     #region Properties
 
@@ -95,13 +98,37 @@ public class Jumper : MonoBehaviour
 
     }
 
+
+    private bool isStrike(Circle circle)
+    {
+        float _deltaX = circle.transform.position.x - gameObject.transform.position.x;
+        float _deltaY = circle.transform.position.y - gameObject.transform.position.y;
+        float _distance = (float)Math.Sqrt(Math.Pow((double)_deltaX, 2) + Math.Pow((double)_deltaY, 2));
+
+        Debug.Log("_deltaX = " + _deltaX.ToString() + " _deltaY = " + _deltaY.ToString() + " distance = " + _distance.ToString());
+
+        bool _strike = false;
+
+        //Get max distance between circle and jumper colliders. Maybe need optimisation!
+        float _maxDistance = circle.GetComponent<CircleCollider2D>().radius * circle.transform.localScale.x + this.GetComponent<CircleCollider2D>().radius * this.transform.localScale.x;
+
+        Debug.Log("maxDistance = " + _maxDistance.ToString());
+
+        if(_distance <= _maxDistance / StrikeCoef)
+            _strike = true;
+
+        return _strike;
+    }
+
+
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.collider.tag == "Circle")
         {
             var circle = col.gameObject.GetComponent<Circle>(); 
             circle.Reached();
-            CircleReached(circle.difficulty);
+
+            CircleReached(circle.difficulty, isStrike(circle));
             rb.gravityScale = 0;
             rb.velocity = new Vector2(0f, 0f);
             gameObject.transform.position = col.gameObject.transform.position;

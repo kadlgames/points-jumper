@@ -49,6 +49,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -115,6 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particleSystemGO: {fileID: 622517316470856660, guid: a56b0cab0980ca546b153692a2465663,
     type: 3}
+  difficulty: 0
 --- !u!95 &7452288610278216254
 Animator:
   serializedVersion: 3

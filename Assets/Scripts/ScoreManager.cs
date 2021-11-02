@@ -10,6 +10,7 @@ public class ScoreManager : MonoBehaviour
     private Animator _scoreAnimator;
 
     private TMP_Text _scoreText;
+    private int _strikeCount = 0;
 
     [SerializeField] private Jumper jumper;
     
@@ -32,10 +33,26 @@ public class ScoreManager : MonoBehaviour
     }
 
 
-    private void OnCircleReached(int _dif)
+    private void OnCircleReached(int dif, bool isStrike)
     {
-        _nowScore += _dif + 1;
+        int _incr = 1;
+        _incr += dif;
+        
+        if(isStrike)
+        {
+            _strikeCount++;
+            _incr *= _strikeCount;
+            Debug.Log("Strike! count = " + _strikeCount.ToString());
+        }
+        else
+        {
+            _strikeCount = 0;
+        } 
+            
+        _nowScore += _incr;
+
         _scoreText.text = _nowScore.ToString();
-       _scoreAnimator.SetTrigger("Bounce");
+        _scoreAnimator.SetTrigger("Bounce");
+        
     }
 }
