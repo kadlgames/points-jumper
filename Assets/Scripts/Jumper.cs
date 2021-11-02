@@ -105,14 +105,10 @@ public class Jumper : MonoBehaviour
         float _deltaY = circle.transform.position.y - gameObject.transform.position.y;
         float _distance = (float)Math.Sqrt(Math.Pow((double)_deltaX, 2) + Math.Pow((double)_deltaY, 2));
 
-        Debug.Log("_deltaX = " + _deltaX.ToString() + " _deltaY = " + _deltaY.ToString() + " distance = " + _distance.ToString());
-
         bool _strike = false;
 
         //Get max distance between circle and jumper colliders. Maybe need optimisation!
         float _maxDistance = circle.GetComponent<CircleCollider2D>().radius * circle.transform.localScale.x + this.GetComponent<CircleCollider2D>().radius * this.transform.localScale.x;
-
-        Debug.Log("maxDistance = " + _maxDistance.ToString());
 
         if(_distance <= _maxDistance / StrikeCoef)
             _strike = true;

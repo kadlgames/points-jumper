@@ -42,7 +42,6 @@ public class ScoreManager : MonoBehaviour
         {
             _strikeCount++;
             _incr *= _strikeCount;
-            Debug.Log("Strike! count = " + _strikeCount.ToString());
         }
         else
         {
@@ -53,6 +52,6 @@ public class ScoreManager : MonoBehaviour
 
         _scoreText.text = _nowScore.ToString();
         _scoreAnimator.SetTrigger("Bounce");
-        
+
     }
 }
