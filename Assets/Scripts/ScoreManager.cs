@@ -11,6 +11,7 @@ public class ScoreManager : MonoBehaviour
 
     private TMP_Text _scoreText;
     private int _strikeCount = 0;
+    private float _curLayerW = 0f;
 
     [SerializeField] private Jumper jumper;
     
@@ -23,7 +24,9 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         _scoreText = GetComponent<TMP_Text>();
+        _scoreText.color = Color.blue;
         _scoreAnimator = GetComponent<Animator>();
+        _scoreAnimator.SetLayerWeight(1, 0);
     }
 
     // Update is called once per frame
@@ -40,12 +43,20 @@ public class ScoreManager : MonoBehaviour
         
         if(isStrike)
         {
+            _scoreText.color = Color.yellow;
+            _scoreAnimator.SetBool("Tremble", true);
+            _curLayerW += 0.1f;
+            _scoreAnimator.SetLayerWeight(1, _curLayerW);
             _strikeCount++;
             _incr *= _strikeCount;
         }
         else
         {
+            _scoreText.color = Color.blue;
+            _scoreAnimator.SetBool("Tremble", false);
+            _scoreAnimator.SetLayerWeight(1, 0f);
             _strikeCount = 0;
+            _curLayerW = 0f;
         } 
             
         _nowScore += _incr;
