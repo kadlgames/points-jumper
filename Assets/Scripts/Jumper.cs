@@ -30,7 +30,7 @@ public class Jumper : MonoBehaviour
     [SerializeField]
     float ForceImpulseMultiplier = 10f;
 
-    [SerializeField] private float StrikeCoef = 1.2f;
+    [SerializeField] private float StrikeMaxAngleDif = 5f;
 
 
     GameObject arrow;
@@ -101,19 +101,13 @@ public class Jumper : MonoBehaviour
 
     private bool isStrike(Circle circle)
     {
-        float _deltaX = circle.transform.position.x - gameObject.transform.position.x;
-        float _deltaY = circle.transform.position.y - gameObject.transform.position.y;
-        float _distance = (float)Math.Sqrt(Math.Pow((double)_deltaX, 2) + Math.Pow((double)_deltaY, 2));
+        Vector2 jumperDirection = rb.velocity;
+        Vector2 centerToCenterVector = ((Vector2)circle.transform.position - (Vector2)this.transform.position);
 
-        bool _strike = false;
+        // angle means how accurate shot was. closer to 90 - more accurate
+        var angle = Vector2.Angle(jumperDirection, centerToCenterVector);
 
-        //Get max distance between circle and jumper colliders. Maybe need optimisation!
-        float _maxDistance = circle.GetComponent<CircleCollider2D>().radius * circle.transform.localScale.x + this.GetComponent<CircleCollider2D>().radius * this.transform.localScale.x;
-
-        if(_distance <= _maxDistance / StrikeCoef)
-            _strike = true;
-
-        return _strike;
+        return (angle < 90 + StrikeMaxAngleDif);
     }
 
 
