@@ -8,6 +8,8 @@ public class Circle : MonoBehaviour
     private Animator _animator;
     [SerializeField] private GameObject particleSystemGO;
 
+    public int difficulty = 0;
+
     #endregion
 
     /// <summary>

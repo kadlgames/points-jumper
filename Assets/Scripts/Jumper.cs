@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
 
 /// <summary>
 /// Jumper - character
@@ -16,9 +19,14 @@ public class Jumper : MonoBehaviour
     [SerializeField]
     private float forceImpulseMultiplier = 10f;
 
-    private GameObject _arrow;
-    private Rigidbody2D _rb;
+    [SerializeField] private float StrikeMaxAngleDif = 5f;
+
+    GameObject arrow;
+    Rigidbody2D rb;
+
     #endregion
+
+    public event Action<int, bool> CircleReached = delegate { };
 
     #region Properties
 
@@ -32,9 +40,9 @@ public class Jumper : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        _arrow = GameObject.Find("arrow");
-        _radius = _arrow.transform.position.y - transform.position.y;
-        _rb = GetComponent<Rigidbody2D>();
+        arrow = GameObject.Find("arrow");
+        _radius = arrow.transform.position.y - transform.position.y;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -43,7 +51,7 @@ public class Jumper : MonoBehaviour
         // Arrow hiding
         if (!IsJumping)
         {
-            _arrow.GetComponent<SpriteRenderer>().enabled = true;
+            arrow.GetComponent<SpriteRenderer>().enabled = true;
         }
     }
 
@@ -57,10 +65,10 @@ public class Jumper : MonoBehaviour
         var position = transform.position;
         var x = _radius * Mathf.Cos(rad) + position.x;
         var y = _radius * Mathf.Sin(rad) + position.y;
-        _arrow.transform.position = new Vector2(x, y);
+        arrow.transform.position = new Vector2(x, y);
 
         // Changing rotation
-        _arrow.transform.rotation = Quaternion.Euler(0, 0, 180 + angle);
+        arrow.transform.rotation = Quaternion.Euler(0, 0, 180 + angle);
     }
 
     /// <summary>
@@ -73,25 +81,42 @@ public class Jumper : MonoBehaviour
         var rad = angle * Mathf.Deg2Rad;
         var x = _radius * Mathf.Cos(rad);
         var y = _radius * Mathf.Sin(rad);
-        _rb.AddForce(new Vector2(x, y) * forceImpulseMultiplier, ForceMode2D.Impulse);
-        _arrow.GetComponent<SpriteRenderer>().enabled = false;
+        rb.AddForce(new Vector2(x, y) * forceImpulseMultiplier, ForceMode2D.Impulse);
+        arrow.GetComponent<SpriteRenderer>().enabled = false;
 
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+
+    private bool isStrike(Circle circle)
+    {
+        Vector2 jumperDirection = rb.velocity;
+        Vector2 centerToCenterVector = ((Vector2)circle.transform.position - (Vector2)this.transform.position);
+
+        // angle means how accurate shot was. closer to 90 - more accurate
+        var angle = Vector2.Angle(jumperDirection, centerToCenterVector);
+
+        return (angle < 90 + StrikeMaxAngleDif);
+    }
+
+
+    void OnCollisionEnter2D(Collision2D col)
     {
         if (col.collider.CompareTag("Circle"))
         {
-            col.gameObject.GetComponent<Circle>().Reached();
-            _rb.gravityScale = 0;
-            _rb.velocity = new Vector2(0f, 0f);
+            var circle = col.gameObject.GetComponent<Circle>(); 
+            circle.Reached();
+
+            CircleReached(circle.difficulty, isStrike(circle));
+            rb.gravityScale = 0;
+            rb.velocity = new Vector2(0f, 0f);
             gameObject.transform.position = col.gameObject.transform.position;
             IsJumping = false;
-            _arrow.SetActive(true);
+            arrow.SetActive(true);
+            
         }
         else
         {
-            _rb.gravityScale = 1;
+            rb.gravityScale = 1;
         }
     }
 }
