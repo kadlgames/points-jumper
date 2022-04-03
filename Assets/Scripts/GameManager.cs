@@ -1,21 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public static class GameManager
+﻿public static class GameManager
 {
-    #region  Fields
-    
-    static bool isGamePaused = true;
-
-    #endregion
 
     #region Properties
 
-    public static bool IsGamePaused
-    {
-        get { return isGamePaused; }
-    }
+    public static bool IsGamePaused { get; private set; } = true;
 
     #endregion
 
@@ -23,7 +11,7 @@ public static class GameManager
 
     public static void SetGamePause(bool a)
     {
-        isGamePaused = a;
+        IsGamePaused = a;
     }
 
     #endregion

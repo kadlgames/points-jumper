@@ -1,21 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraMover : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField]
-    float cameraSpeed = 1f;
+    [SerializeField] private float cameraSpeed = 1f;
 
-    [SerializeField]
-    GameObject player = null;
+    [SerializeField] private GameObject player;
 
-    Vector3 target = new Vector3(0f, 0f, -10f);
-    Jumper playerBehavior;
-    float defaultDistanceToPlayer;
-    bool isOnTargetPosition = true;
+    private Vector3 _target = new Vector3(0f, 0f, -10f);
+    private Jumper _playerBehavior;
+    private float _defaultDistanceToPlayer;
 
     #endregion
 
@@ -25,32 +20,28 @@ public class CameraMover : MonoBehaviour
     /// Is camera located on target position
     /// </summary>
     /// <value></value>
-    public bool IsOnTargetPosition
-    {
-        get { return isOnTargetPosition; }
-    }
+    public bool IsOnTargetPosition { get; private set; } = true;
 
     #endregion
 
     #region Methods
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        playerBehavior = player.GetComponent<Jumper>();
-        defaultDistanceToPlayer = transform.position.y - player.transform.position.y;
+        _playerBehavior = player.GetComponent<Jumper>();
+        _defaultDistanceToPlayer = transform.position.y - player.transform.position.y;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Lerping
-        target.y = player.transform.position.y;
-        target.y += defaultDistanceToPlayer;
-        if (!playerBehavior.IsJumping) LerpToPlayer(target);
+        _target.y = player.transform.position.y;
+        _target.y += _defaultDistanceToPlayer;
+        if (!_playerBehavior.IsJumping) LerpToPlayer(_target);
 
         // Checking if camera located on target position
-        if (Mathf.Abs(target.y - transform.position.y) <= 0.1f) isOnTargetPosition = true;
-        else isOnTargetPosition = false;
+        IsOnTargetPosition = Mathf.Abs(_target.y - transform.position.y) <= 0.1f;
         //Debug.Log("isOnTargetPosition: " + isOnTargetPosition);
     }
 
@@ -58,15 +49,15 @@ public class CameraMover : MonoBehaviour
     /// Lerps to player with some distance by Y
     /// </summary>
     /// <param name="target">Target (player)</param>
-    void LerpToPlayer(Vector3 target)
+    private void LerpToPlayer(Vector3 target)
     {
         transform.position = Vector3.Lerp(transform.position, target, Time.deltaTime * cameraSpeed);
-    } 
+    }
 
-    void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawSphere(target, 0.1f);
+        Gizmos.DrawSphere(_target, 0.1f);
     }
     #endregion
 

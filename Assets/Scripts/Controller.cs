@@ -1,122 +1,108 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
 
     #region Fields
 
-    [SerializeField]
-    GameObject point = null;
+    [SerializeField] private GameObject point;
 
     /// <summary>
     /// The distance between controller object and a point
     /// </summary>
-    float radius;
+    private float _radius;
 
     /// <summary>
     /// The controlling angle
     /// </summary>
-    float angle = 90;
+    private float _angle = 90;
 
     /// <summary>
     /// Reference to a player's jumper
     /// </summary>
-    [SerializeField]
-    GameObject jumper = null;
+    [SerializeField] private GameObject jumper;
 
-    /// <summary>
-    /// Странная часть кода. Ссылка на кнопку паузы
-    /// </summary>
-    [SerializeField]
-    GameObject pauseButton = null;
-    Image pauseButtonImage = null;
-
-    Animator animator;
+    private Animator _animator;
+    private static readonly int IsControllerShowed = Animator.StringToHash("isControllerShowed");
 
     #endregion
     // Start is called before the first frame update
-    
-    void Start()
+
+    private void Start()
     {
-        radius = point.transform.localPosition.y;
-        animator = GetComponent<Animator>();
-        pauseButton = GameObject.Find("PauseButton");
-        pauseButtonImage = pauseButton.GetComponent<Image>();
+        _radius = point.transform.localPosition.y;
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (GetTouchPosition(out var touchPos, out Touch touch))
+        if (!GetTouchPosition(out var touchPos, out var touch)) return;
+        if (IfTouchAtUI()) return;
+        if (touch.phase == TouchPhase.Began || Input.GetMouseButtonDown(0))
         {
-            if (!IfTouchAtPauseButton(touchPos))
-            {
-                if (touch.phase == TouchPhase.Began || Input.GetMouseButtonDown(0))
-                {
-                    animator.SetBool("isControllerShowed", true);
-                    touchPos.y -= radius * point.transform.lossyScale.y;
-                    transform.position = touchPos;
-                }
-                else if (touch.phase == TouchPhase.Ended || Input.GetMouseButtonUp(0))
-                {
-                    animator.SetBool("isControllerShowed", false);
-                    jumper.GetComponent<Jumper>().Jump(angle);
-                }
-                else
-                {
-                    // touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+            _animator.SetBool(IsControllerShowed, true);
+            touchPos.y -= _radius * point.transform.lossyScale.y;
+            transform.position = touchPos;
+        }
+        else if (touch.phase == TouchPhase.Ended || Input.GetMouseButtonUp(0))
+        {
+            _animator.SetBool(IsControllerShowed, false);
+            jumper.GetComponent<Jumper>().Jump(_angle);
+        }
+        else
+        {
+            // touchPos = Camera.main.ScreenToWorldPoint(touch.position);
 
-                    if (touchPos.y > transform.position.y) touchPos.y = transform.position.y;
+            if (touchPos.y > transform.position.y) touchPos.y = transform.position.y;
 
-                    // Move the point and change the angle
+            // Move the point and change the angle
 
-                    float distance = Vector2.Distance(transform.position, touchPos);
-                    float cosx = (transform.position.y - touchPos.y) / distance;
-                    float sinx = (transform.position.x - touchPos.x) / distance;
+            var position = transform.position;
+            var distance = Vector2.Distance(position, touchPos);
+            var cosX = (position.y - touchPos.y) / distance;
+            var sinX = (position.x - touchPos.x) / distance;
 
-                    angle = Mathf.Acos(cosx) * Mathf.Rad2Deg;
-                    if (sinx > 0) angle *= -1;
-                    angle += 90;
+            _angle = Mathf.Acos(cosX) * Mathf.Rad2Deg;
+            if (sinX > 0) _angle *= -1;
+            _angle += 90;
 
-                    jumper.GetComponent<Jumper>().RotateArrow(angle);
-                    Vector2 newPointPos = new Vector2(radius * sinx, radius * cosx);
+            jumper.GetComponent<Jumper>().RotateArrow(_angle);
+            var newPointPos = new Vector2(_radius * sinX, _radius * cosX);
 
-                    RotatePointAndArrow(newPointPos);
-                }
-            }
+            RotatePointAndArrow(newPointPos);
         }
     }
 
     /// <summary>
     /// Rotates a point and changing the angle
     /// </summary>
-    void RotatePointAndArrow(Vector2 newPointPos)
+    private void RotatePointAndArrow(Vector2 newPointPos)
     {
         point.transform.localPosition = newPointPos;
     }
 
-    bool IfTouchAtPauseButton(Vector2 tp)
+    private static bool IfTouchAtUI()
     {
-        return false;
+        return Utils.Utils.IsPointerOverUi();
     }
 
-    private bool GetTouchPosition(out Vector2 outVector, out Touch outTouch)
+    private static bool GetTouchPosition(out Vector2 outVector, out Touch outTouch)
     {
         if (!GameManager.IsGamePaused)
         {
             if (Input.touchCount > 0)
             {
                 outTouch = Input.GetTouch(0);
-                outVector = Camera.main.ScreenToWorldPoint(outTouch.position);
+                if (Camera.main is { }) outVector = Camera.main.ScreenToWorldPoint(outTouch.position);
+                else outVector = Vector2.zero;
                 return true;
             }
             if (Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
             {
                 outTouch = new Touch {phase = TouchPhase.Canceled};
-                outVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                if (Camera.main is { }) outVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                else outVector = Vector2.zero;
                 return true;
             }
         }

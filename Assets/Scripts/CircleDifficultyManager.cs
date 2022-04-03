@@ -14,10 +14,10 @@ public class CircleDifficultyManager : MonoBehaviour
 
     private readonly List<int> _suitableCirclesId = new List<int>();
     
-    //Circles id with difficlty less or equal than maxNextDif
+    //Circles id with difficulty less or equal than maxNextDif
     private readonly List<int> _nextDifCirclesId = new List<int>();
     
-    public GameObject GetNextCicrcle(int jumpNumber)
+    public GameObject GetNextCircle(int jumpNumber)
     {
         _suitableCirclesId.Clear();
         _nextDifCirclesId.Clear();
@@ -33,7 +33,7 @@ public class CircleDifficultyManager : MonoBehaviour
             }
         }
         
-        // Get next difficlty circle id
+        // Get next difficulty circle id
         var nextCircleId = _nextDifCirclesId[Random.Range(0, _nextDifCirclesId.Count)];
         // Circle difficulty select
         var n = circles[nextCircleId].difficulty;
@@ -47,7 +47,7 @@ public class CircleDifficultyManager : MonoBehaviour
 
         if (_suitableCirclesId.Count == 0)
         {
-            Debug.LogError("in function CircleDifficltyManager::getNextCicrcle. Get empty suitableCirclesId list");
+            Debug.LogError("in function CircleDifficultyManager::getNextCircle. Get empty suitableCirclesId list");
             
             var minDifCircleId = 0;
             var minDif = int.MaxValue;

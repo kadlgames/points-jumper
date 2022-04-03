@@ -1,51 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Circle : MonoBehaviour
 {
     #region Fields
 
-    bool isActive = true;
-    bool isAlreadyReached = false;
-    Animator animator;
-    [SerializeField]
-    GameObject particleSystemGO = null;
+    private bool _isAlreadyReached;
+    private Animator _animator;
+    [SerializeField] private GameObject particleSystemGO;
 
     public int difficulty = 0;
 
     #endregion
 
-    #region Properties
-
     /// <summary>
     /// Is this circle active
     /// </summary>
     /// <value></value>
-    public bool IsActive
-    {
-        get { return isActive; }
-    }
+    public bool IsActive { get; private set; } = true;
 
-    #endregion
 
-    Collider2D col;
+    private Collider2D _col;
+
+    private static readonly int Reached1 = Animator.StringToHash("reached");
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        col = GetComponent<Collider2D>();
-        animator = GetComponent<Animator>();
+        _col = GetComponent<Collider2D>();
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (!isActive && !isAlreadyReached)
-        {
-            animator.SetTrigger("reached");
-            isAlreadyReached = true;
-            Instantiate<GameObject>(particleSystemGO, transform.position, Quaternion.identity);
-        }  
+        if (IsActive || _isAlreadyReached) return;
+        _animator.SetTrigger(Reached1);
+        _isAlreadyReached = true;
+        Instantiate(particleSystemGO, transform.position, Quaternion.identity);
     }
 
     void OnBecameInvisible()
@@ -58,8 +49,8 @@ public class Circle : MonoBehaviour
     /// </summary>
     public void Reached()
     {
-        isActive = false;
-        col.enabled = false;
+        IsActive = false;
+        _col.enabled = false;
     }
 }
 

@@ -14,25 +14,23 @@ public enum Bound
 public class BoundsPack
 {
     #region Fields
-    float upper;
-    float lower;
-    float left;
-    float right;
+
     #endregion
 
     #region Properties
-    public float Upper { get { return upper; }}
-    public float Lower { get { return lower; }}
-    public float Left { get { return left; }}
-    public float Right { get { return right; }}
+    public float Upper { get; }
+    public float Lower { get; }
+    public float Left { get; }
+    public float Right { get; }
+
     #endregion
 
     public BoundsPack(float upper, float lower, float left, float right)
     {
-        this.upper = upper;
-        this.lower = lower;
-        this.left = left;
-        this.right = right;
+        Upper = upper;
+        Lower = lower;
+        Left = left;
+        Right = right;
     }
 }
 /// <summary>
@@ -41,8 +39,8 @@ public class BoundsPack
 public static class Bounds
 {
     #region Fields
-    
-    static int currentFrame = 0;
+
+    private static int _currentFrame;
 
     #endregion
 
@@ -53,25 +51,19 @@ public static class Bounds
     /// </summary>
     /// <param name="selectedBound">The bound that coordinates you need to know</param>
     /// <returns></returns>
-    public static float GetBound(Bound selectedBound)
+    private static float GetBound(Bound selectedBound)
     {
-        if (Time.frameCount != currentFrame) ScreenUtils.Initialize();
-        currentFrame = Time.frameCount;
+        if (Time.frameCount != _currentFrame) ScreenUtils.Initialize();
+        _currentFrame = Time.frameCount;
 
-        switch (selectedBound)
+        return selectedBound switch
         {
-            case Bound.Upper:
-                return ScreenUtils.ScreenTop - (ScreenUtils.ScreenTop - ScreenUtils.ScreenBottom) * 0.1f;
-            case Bound.Lower:
-                return ScreenUtils.ScreenBottom + (ScreenUtils.ScreenTop - ScreenUtils.ScreenBottom) * 0.45f;
-            case Bound.Left:
-                return ScreenUtils.ScreenLeft + (ScreenUtils.ScreenRight - ScreenUtils.ScreenLeft) * 0.15f;
-            case Bound.Right:
-                return ScreenUtils.ScreenRight - (ScreenUtils.ScreenRight - ScreenUtils.ScreenLeft) * 0.15f;
-            default:
-                return 0;
-        }
-
+            Bound.Upper => ScreenUtils.ScreenTop - (ScreenUtils.ScreenTop - ScreenUtils.ScreenBottom) * 0.1f,
+            Bound.Lower => ScreenUtils.ScreenBottom + (ScreenUtils.ScreenTop - ScreenUtils.ScreenBottom) * 0.45f,
+            Bound.Left => ScreenUtils.ScreenLeft + (ScreenUtils.ScreenRight - ScreenUtils.ScreenLeft) * 0.15f,
+            Bound.Right => ScreenUtils.ScreenRight - (ScreenUtils.ScreenRight - ScreenUtils.ScreenLeft) * 0.15f,
+            _ => 0
+        };
     }
 
     /// <summary>
