@@ -1,21 +1,24 @@
-﻿public static class GameManager
-{
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
-    #region Properties
-
+public static class GameManager
+{    
     public static bool IsGamePaused { get; private set; } = true;
-
-    #endregion
-
-    #region Methods
 
     public static void SetGamePause(bool a)
     {
         IsGamePaused = a;
     }
 
-    #endregion
+    public static void Init()
+    {
+        GameObject.Find("GOTrigger").GetComponent<GOTrigger>().GameOver += OnGameOver;
+    }
 
+    private static void OnGameOver()
+    {
+        SceneManager.LoadScene("Gameplay");
+    }
 }
 
 
