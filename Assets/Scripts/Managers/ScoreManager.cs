@@ -15,6 +15,8 @@ public class ScoreManager : MonoBehaviour
 
     [SerializeField] private Jumper jumper;
     
+    public int Score => _nowScore;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -34,7 +36,6 @@ public class ScoreManager : MonoBehaviour
     {
         
     }
-
 
     private void OnCircleReached(int dif, bool isStrike)
     {
