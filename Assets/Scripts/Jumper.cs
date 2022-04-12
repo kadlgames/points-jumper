@@ -35,6 +35,8 @@ public class Jumper : MonoBehaviour
     /// </summary>
     public bool IsJumping { get; private set; }
 
+    private bool _isArrowHided = true;
+
     #endregion
 
     // Start is called before the first frame update
@@ -51,7 +53,7 @@ public class Jumper : MonoBehaviour
         // Arrow hiding
         if (!IsJumping)
         {
-            arrow.GetComponent<SpriteRenderer>().enabled = true;
+            arrow.GetComponent<SpriteRenderer>().enabled = !_isArrowHided;
         }
     }
 
@@ -119,4 +121,15 @@ public class Jumper : MonoBehaviour
             rb.gravityScale = 1;
         }
     }
+
+    public void ResetStatus() 
+    {
+        IsJumping = false;
+        rb.gravityScale = 0;
+        rb.velocity = Vector2.zero;
+    }
+
+    public void HideArrow() { _isArrowHided = true;}
+
+    public void ShowArrow() { _isArrowHided = false;}
 }
