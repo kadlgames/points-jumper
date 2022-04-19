@@ -20,7 +20,7 @@ public class GameplayManager : MonoBehaviour
     {
         GameObject.Find("GOTrigger").GetComponent<GOTrigger>().GameOver += HideEnvironment;
         _jpScript = _jumper.GetComponent<Jumper>();
-        _jpSRenderer = _jumper.GetComponent<SpriteRenderer>();
+        _jpSRenderer = _jumper.GetComponentInChildren<SpriteRenderer>();
         _jpSRenderer.enabled = false;
         _jpScript.HideArrow();
     }
