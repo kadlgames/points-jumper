@@ -27,16 +27,19 @@ public class GameplayManager : MonoBehaviour
 
     public void SpawnEnvironment()
     {
-        _scoreManager.ResetScore();
-        
-        RecalculateInitJumperPos();
-        _jumper.transform.position = _initialJumperPos;
-        _jpScript.ResetStatus();
-        _jpSRenderer.enabled = true;
-        _jpScript.ShowArrow();
-        _jpScript.RotateArrow(90f);
+        if (GameManager.IsGameOvered)
+        {
+            _scoreManager.ResetScore();
+            
+            RecalculateInitJumperPos();
+            _jumper.transform.position = _initialJumperPos;
+            _jpScript.ResetStatus();
+            _jpSRenderer.enabled = true;
+            _jpScript.ShowArrow();
+            _jpScript.RotateArrow(90f);
 
-        GameManager.ResetGame();
+            GameManager.ResetGame();
+        }
     }
 
     public void HideEnvironment()
