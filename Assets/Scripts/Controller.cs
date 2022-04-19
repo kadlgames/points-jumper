@@ -37,7 +37,7 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if ((Input.touchCount > 0 || Input.GetMouseButtonUp(0))&& GameManager.IsGameOvered)
+        if ((Input.touchCount > 0 || Input.GetMouseButtonUp(0)) && GameManager.IsGameOvered)
         {
             GameManager.CloseGOMenu();
             return;

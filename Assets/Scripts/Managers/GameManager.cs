@@ -29,8 +29,11 @@ public static class GameManager
 
     public static void CloseGOMenu()
     {
-        _menuAnimator.SetTrigger("go_close");
-        IsOnGOScreen = false;
+        if (IsOnGOScreen)
+        {
+            _menuAnimator.SetTrigger("go_close");
+            IsOnGOScreen = false;
+        }
     }
 
     private static void OnGameOver()
