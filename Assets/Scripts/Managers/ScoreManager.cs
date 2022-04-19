@@ -15,10 +15,22 @@ public class ScoreManager : MonoBehaviour
 
     [SerializeField] private Jumper jumper;
     
+    public int Score => _nowScore;
+
     // Start is called before the first frame update
     void Awake()
     {
         jumper.CircleReached += OnCircleReached;
+    }
+
+    void Update()
+    {
+        if (GameManager.IsGameOvered) { _nowScore = 0;}
+    }
+
+    void OnGameOver()
+    {
+        _nowScore = 0;
     }
 
     void Start()
@@ -28,13 +40,6 @@ public class ScoreManager : MonoBehaviour
         _scoreAnimator = GetComponent<Animator>();
         _scoreAnimator.SetLayerWeight(1, 0);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
 
     private void OnCircleReached(int dif, bool isStrike)
     {
@@ -64,5 +69,17 @@ public class ScoreManager : MonoBehaviour
         _scoreText.text = _nowScore.ToString();
         _scoreAnimator.SetTrigger("Bounce");
 
+    }
+
+    public void ResetScore() 
+    {
+        _nowScore = 0;
+        _scoreText.text = _nowScore.ToString();
+        _scoreText.color = Color.blue;
+        _scoreAnimator.SetBool("Tremble", false);
+        _scoreAnimator.SetLayerWeight(1, 0f);
+        _strikeCount = 0;
+        _curLayerW = 0f;
+        _scoreAnimator.SetTrigger("Bounce");
     }
 }

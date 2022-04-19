@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class HUD : MonoBehaviour
 {
-    public void HandleOnReloadSceneButtonEvent()
+    [SerializeField] GameObject _scoreText;
+    
+    private void Update() 
     {
-        
+        _scoreText.SetActive(!GameManager.IsGameOvered);
     }
 }
