@@ -44,6 +44,10 @@ public static class GameManager
         IsGameOvered = true;
         IsOnGOScreen = true;
         _menuAnimator.SetTrigger("gp_close");
+
+        //Make sure that Homer has done his thing)))
+
+
         _menuAnimator.SetTrigger("go_open");
         _scoreText.text = _scoreManager.Score.ToString();
 
