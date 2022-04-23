@@ -3168,20 +3168,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 36754172436936668, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 4
+    - target: {fileID: 1261310505, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1261310505, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1261310505, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1261310505, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1261310507, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5, type: 3}
+      propertyPath: m_Parameters.alignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1261310507, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 1261310507, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1261310507, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4444736679050327500, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5,
         type: 3}
       propertyPath: m_Name
       value: Jumper
-      objectReference: {fileID: 0}
-    - target: {fileID: 4444736679050327500, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7231096938909514301, guid: ffc7c05bbcfbd944e85a39c8cd63a9c5,
         type: 3}
